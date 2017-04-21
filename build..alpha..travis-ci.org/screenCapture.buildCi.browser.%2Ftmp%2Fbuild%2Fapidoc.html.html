@@ -1,0 +1,138 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a>mocha-bamboo-reporter (v1.1.1)</a>
+</h1>
+<h4>A mocha reporter to allow Atlassian Bamboo to parse results</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.mocha-bamboo-reporter">module mocha-bamboo-reporter</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.mocha-bamboo-reporter.mocha-bamboo-reporter">
+            function <span class="apidocSignatureSpan"></span>mocha-bamboo-reporter
+            <span class="apidocSignatureSpan">(runner, options)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.mocha-bamboo-reporter" id="apidoc.module.mocha-bamboo-reporter">module mocha-bamboo-reporter</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.mocha-bamboo-reporter.mocha-bamboo-reporter" id="apidoc.element.mocha-bamboo-reporter.mocha-bamboo-reporter">
+        function <span class="apidocSignatureSpan"></span>mocha-bamboo-reporter
+        <span class="apidocSignatureSpan">(runner, options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function BambooJSONReporter(runner, options) {
+  var self = this;
+  Base.call(this, runner);
+
+  var tests = []
+    , failures = []
+    , passes = []
+    , skipped = [];
+
+  if (options &amp;&amp; options.reporterOptions &amp;&amp; options.reporterOptions.output) {
+    filename = options.reporterOptions.output;
+  }
+
+  runner.on('test end', function(test){
+    tests.push(test);
+  });
+
+  runner.on('pending', function(test) {
+    skipped.push(test);
+  });
+
+  runner.on('pass', function(test){
+    passes.push(test);
+  });
+
+  runner.on('fail', function(test){
+    failures.push(test);
+  });
+
+  runner.on('end', function(){
+    var obj = {
+        stats: self.stats
+      , failures: failures.map(clean)
+      , passes: passes.map(clean)
+      , skipped: skipped.map(clean)
+    };
+
+    fs.writeFileSync(filename, JSON.stringify(obj, null, 2), 'utf-8');
+  });
+  runner.on('start', function() {
+    if (fs.existsSync(filename)) {
+      fs.unlinkSync(filename); // if we die at some point, we don't want bamboo to have a stale results file lying around...
+    }
+  });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
